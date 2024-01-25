@@ -31,7 +31,7 @@ async def main():
             # print(f'avrg_vol = {avrg_vol}')
             # print(f'last_volume = {last_volume}')
             # print('')
-            if last_volume > avrg_vol * 3:
+            if last_volume > avrg_vol * 1:
                 print(str(quote.keys()))
 
 # Запуск асинхронного кода
