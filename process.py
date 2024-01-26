@@ -1,5 +1,4 @@
 import asyncio
-import time
 
 from api import get_shares_list, get_candles
 import numpy as np
@@ -13,7 +12,6 @@ async def calculate_average_vol(quote_arr):
 async def main():
     shares = await get_shares_list()
     shares_name_dict = {a.figi: a.name for a in shares}
-    # await asyncio.sleep(60)
 
     tasks = []
     semaphore = asyncio.Semaphore(250)
@@ -27,12 +25,7 @@ async def main():
         if data and data[0]:
             avrg_vol = await calculate_average_vol(data)
             last_volume = data[0][-1].volume
-            # print(quote.keys())
-            # print(f'avrg_vol = {avrg_vol}')
-            # print(f'last_volume = {last_volume}')
-            # print('')
-            if last_volume > avrg_vol * 1:
+            if last_volume > avrg_vol * 2:
                 print(str(quote.keys()))
 
-# Запуск асинхронного кода
 asyncio.run(main())

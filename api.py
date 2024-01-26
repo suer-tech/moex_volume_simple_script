@@ -2,7 +2,7 @@ import asyncio
 import time
 from datetime import timedelta
 
-from tinkoff.invest import AsyncClient, CandleInterval, Client
+from tinkoff.invest import AsyncClient, CandleInterval
 from tinkoff.invest.utils import now
 
 from config import TOKEN
@@ -32,6 +32,5 @@ async def get_candles(figi, name):
             ):
                 all_candles.append(candle)
         except Exception as e:
-            # Общая обработка ошибок
             print(f"Произошла ошибка при получении свечей: {e}")
         return {name: all_candles}
