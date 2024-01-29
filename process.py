@@ -25,7 +25,8 @@ async def main():
         if data and data[0]:
             avrg_vol = await calculate_average_vol(data)
             last_volume = data[0][-1].volume
-            if last_volume > avrg_vol * 2:
+            if last_volume > avrg_vol * 3:
+
                 print(str(quote.keys()))
 
 asyncio.run(main())
