@@ -1,3 +1,5 @@
-config.py
+vol/config.py
 venv/
 .idea/
+.venv/
+parser.py

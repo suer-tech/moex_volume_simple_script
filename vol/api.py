@@ -1,5 +1,4 @@
 import asyncio
-import time
 from datetime import timedelta
 
 from tinkoff.invest import AsyncClient, CandleInterval
@@ -34,3 +33,9 @@ async def get_candles(figi, name):
         except Exception as e:
             print(f"Произошла ошибка при получении свечей: {e}")
         return {name: all_candles}
+
+
+async def get_ticker(ticker: str):
+    async with AsyncClient(TOKEN) as client:
+        data = await client.instruments.find_instrument(query=ticker, instrument_kind=2)
+        return data.instruments[0].ticker
