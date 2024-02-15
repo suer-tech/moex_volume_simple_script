@@ -4,7 +4,9 @@ from datetime import timedelta
 from tinkoff.invest import AsyncClient, CandleInterval
 from tinkoff.invest.utils import now
 
-from config import TOKEN
+from config import tinkoff
+
+TOKEN = tinkoff
 
 
 async def get_shares_list():

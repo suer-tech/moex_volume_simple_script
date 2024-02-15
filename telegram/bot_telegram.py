@@ -69,16 +69,18 @@ async def send_messages_from_directory(message: types.Message, directory_path: s
 
         for file_name in files:
             file_path = os.path.join(directory_path, file_name)
-            try:
-                with open(file_path, "r") as file:
-                    data = file.read()
-                    message_text = data if data else "No data found in the file."
-                await bot.send_message(message.chat.id, message_text, reply_markup=greet_kb1)
-            except Exception as e:
-                await bot.send_message(message.chat.id, f"Error reading file {file_name}: {str(e)}")
+            if file_name.endswith('.txt'):
+                try:
+                    with open(file_path, "r") as file:
+                        data = file.read()
+                        message_text = data if data else "No data found in the file."
+                    await bot.send_message(message.chat.id, message_text, reply_markup=greet_kb1)
+                except Exception as e:
+                    await bot.send_message(message.chat.id, f"Error reading file {file_name}: {str(e)}")
 
     except Exception as e:
         await bot.send_message(message.chat.id, f"An error occurred: {str(e)}")
+
 
 
 async def main():
@@ -91,10 +93,11 @@ async def main():
     dp.register_message_handler(lambda message: with_puree(message, crypto_file_full_path), Text(equals="Крипто"))
     moex_file_full_path = os.path.join(moex_dir_path, 'all_spread.txt')
     dp.register_message_handler(lambda message: with_puree(message, moex_file_full_path), Text(equals="Спреды"))
-    dp.register_message_handler(lambda message: send_messages_from_directory(message, vol_dir_path), Text(equals="Обьёмы"))
+
+    dp.register_message_handler(lambda message: send_messages_from_directory(message, vol_dir_path), Text(equals="Объёмы MOEX"))
 
     try:
-        await asyncio.create_task(dp.start_polling())
+        asyncio.create_task(dp.start_polling())
         await polling_thread(fdv_crypto_dir_path)
 
     except aiohttp.client_exceptions.ClientOSError as e:
@@ -107,3 +110,5 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
     loop.run_forever()
+
+
