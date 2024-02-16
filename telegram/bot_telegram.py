@@ -63,13 +63,15 @@ async def with_puree(message: types.Message, file_name):
 async def send_messages_from_directory(message: types.Message, directory_path: str):
     try:
         files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
-        if not files:
-            await bot.send_message(message.chat.id, "No files found in the directory.")
+        files_txt = [f for f in files if f.endswith('.txt')]
+        if not files_txt:
+            message_text = "Нет акций превышающих средний объём торгов более чем в 2 раза."
+            await bot.send_message(message.chat.id, message_text, reply_markup=greet_kb1)
             return
 
-        for file_name in files:
-            file_path = os.path.join(directory_path, file_name)
-            if file_name.endswith('.txt'):
+        if len(files_txt) > 0:
+            for file_name in files_txt:
+                file_path = os.path.join(directory_path, file_name)
                 try:
                     with open(file_path, "r") as file:
                         data = file.read()
@@ -80,7 +82,6 @@ async def send_messages_from_directory(message: types.Message, directory_path: s
 
     except Exception as e:
         await bot.send_message(message.chat.id, f"An error occurred: {str(e)}")
-
 
 
 async def main():

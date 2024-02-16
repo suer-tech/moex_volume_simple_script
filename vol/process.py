@@ -1,5 +1,6 @@
 import glob
 import asyncio
+import os
 
 import emoji
 
@@ -55,23 +56,25 @@ async def write_data(key, value):
 
 
 async def delete_txt():
-    files = glob.glob('/*.txt')
-
-    if files:
-        for f in files:
-            try:
-                f.unlink()
-            except OSError as e:
-                print("Error: %s : %s" % (f, e.strerror))
+    print('delete_txt run')
+    directory_path = '../vol'
+    print(os.listdir(directory_path))
+    for f in os.listdir(directory_path):
+        print(f)
+        if f.endswith('.txt'):
+            full_path = os.path.join(directory_path, f)
+            os.remove(full_path)
+            print('file sucess remove')
 
 
 async def main():
     while True:
+        print('delete_txt()')
+        await delete_txt()
         all_candle_data = await get_all_candle_data()
         res = [await write_data(key, value) for candle_data in all_candle_data for key, value in candle_data.items() if value]
-
         await asyncio.sleep(300)
-        await delete_txt()
+
 
 
 if __name__ == '__main__':
